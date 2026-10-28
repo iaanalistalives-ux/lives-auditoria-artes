@@ -667,15 +667,45 @@ table.aqlt tr.fila td.sel{background:#0E3B36}
 .sec{font-size:14px;font-weight:700;color:#0E3B36;margin:0 0 4px}
 .obs{white-space:pre-wrap;border:1px solid var(--warm);border-radius:8px;padding:10px 12px;min-height:90px;font-size:13.5px;flex:1}
 .pie{margin-top:12px;font-size:11.5px;color:var(--stone);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.fotosHoja{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:18px 22px;margin-top:14px}
-.galeria{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
-.galeria figure{margin:0;border:1px solid var(--warm);border-radius:8px;overflow:hidden;background:#fff}
-.galeria img{width:100%;aspect-ratio:1;object-fit:cover;display:block;cursor:zoom-in;background:var(--warm-light)}
-.galeria figcaption{font-size:11.5px;padding:4px 8px;color:#0E3B36;font-weight:700}
 .msg{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:24px;text-align:center;font-size:15px}
 .msg.err{color:var(--rose)}
-.zoom{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:3000;align-items:center;justify-content:center;padding:14px}
-.zoom img{max-width:100%;max-height:100%;object-fit:contain}
+/* ===== Ventana de fotos (igual que Auditoría Final): fotos grandes, girar, zoom e imprimir una por hoja ===== */
+#fotosOverlay{display:none;position:fixed;inset:0;background:#2f353d;z-index:2500;overflow:auto;font-family:Calibri,Arial,sans-serif}
+#fotosOverlay.show{display:block}
+.fobar{position:sticky;top:0;background:#0E3B36;padding:8px 16px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;z-index:5;color:#fff}
+.fobar h2{font-size:15px;margin:0;font-weight:700}
+.fobar .facts{display:flex;flex-wrap:wrap;gap:6px}
+.fobar button{border:none;border-radius:8px;padding:0 14px;min-height:40px;font-weight:700;cursor:pointer;font-size:13.5px;font-family:inherit}
+.fobar .fclose{background:#fff;color:#0E3B36}
+.fobar .fprint{background:#F59E0B;color:#0E3B36}
+.fotabs{display:none;flex-wrap:wrap;gap:6px;padding:10px 16px 0;background:#2f353d}
+.ftab{border:1px solid #55606b;background:transparent;color:#dfe4ea;border-radius:20px;padding:8px 16px;min-height:40px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.ftab.on{background:#F59E0B;color:#0E3B36;border-color:#F59E0B}
+.fowrap{padding:18px;display:flex;flex-direction:column;align-items:center;gap:18px;background:#2f353d;min-height:calc(100vh - 60px)}
+.fotip{color:#dfe4ea;font-size:13px;text-align:center;max-width:600px;margin:0 auto 6px}
+.hojaF{margin:0;background:#fff;border-radius:10px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.hojaF .lab{color:#0E3B36;font-weight:700;font-size:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.hojaF .lab .girar{background:#0F7A5A;color:#fff;border:none;border-radius:8px;padding:8px 14px;min-height:38px;font-weight:700;cursor:pointer;font-size:13px;font-family:inherit;flex:none}
+.hojaF .imgbox{display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hojaF img{display:block;border-radius:6px;transition:transform .15s;transform-origin:center;flex-shrink:0}
+body.viendoFotos{overflow:hidden}
+@media print{
+  body.viendoFotos .toolbar, body.viendoFotos #cont{display:none!important}
+  body.viendoFotos{overflow:visible}
+  body.viendoFotos #fotosOverlay{position:static;display:block!important;background:#fff;overflow:visible}
+  body.viendoFotos .fobar, body.viendoFotos .fotip, body.viendoFotos .girar, body.viendoFotos .fotabs{display:none!important}
+  body.viendoFotos .fowrap{padding:0;gap:0;min-height:0;background:#fff;display:block}
+  body.viendoFotos .hojaF{break-inside:avoid;page-break-inside:avoid;box-shadow:none;border-radius:0;padding:0;margin:0;
+    width:210mm;height:297mm;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+  body.viendoFotos .hojaF + .hojaF{break-before:page;page-break-before:always}
+  body.viendoFotos .hojaF .lab{display:block;font-size:12px;font-weight:700;color:#0E3B36;padding:4mm 0 2mm;text-align:center}
+  body.viendoFotos .hojaF .imgbox{width:100%;flex:1;display:flex;align-items:center;justify-content:center}
+  body.viendoFotos .hojaF[data-deg="0"] img, body.viendoFotos .hojaF[data-deg="180"] img{width:auto;height:auto;max-width:196mm;max-height:270mm;object-fit:contain}
+  body.viendoFotos .hojaF[data-deg="180"] img{transform:rotate(180deg)}
+  body.viendoFotos .hojaF[data-deg="90"] img, body.viendoFotos .hojaF[data-deg="270"] img{transform-origin:center;width:265mm;height:auto;max-height:196mm;object-fit:contain}
+  body.viendoFotos .hojaF[data-deg="90"] img{transform:rotate(90deg)}
+  body.viendoFotos .hojaF[data-deg="270"] img{transform:rotate(270deg)}
+}
 html[data-tema="oscuro"] .enc img{filter:invert(1)}
 @media(max-width:760px){.datos{grid-template-columns:1fr 1fr}.cols,.abajo{grid-template-columns:1fr}}
 @media(max-width:600px){
@@ -695,15 +725,13 @@ html[data-tema="oscuro"] .enc img{filter:invert(1)}
   body{background:#fff!important;font-size:11px}
   .toolbar,.no-print{display:none!important}
   .wrap{max-width:none;padding:0}
-  .hoja,.fotosHoja{box-shadow:none;padding:0}
+  .hoja{box-shadow:none;padding:0}
   .hoja .tira{display:none}
   .enc img{filter:none!important;height:30px}
   .datos{grid-template-columns:repeat(3,minmax(0,1fr))}
   .cols{grid-template-columns:1fr 1fr}.abajo{grid-template-columns:minmax(0,5fr) minmax(0,6fr)}
   .dato .v{font-size:12px}
   table.df{font-size:10.5px} table.df th,table.df td{padding:1px 6px}
-  .fotosHoja{break-before:page;page-break-before:always}
-  .galeria{grid-template-columns:repeat(4,1fr)}
 }
 </style>
 </head>
@@ -713,14 +741,24 @@ html[data-tema="oscuro"] .enc img{filter:invert(1)}
 <div class="wrap">
   <div class="toolbar" id="barra">
     <button class="btn" id="btnPdf" type="button">Compartir PDF</button>
+    <button class="btn" id="btnFotos" type="button" style="display:none">🖼 Fotos</button>
     <button class="btn" id="btnImprimir" type="button">Imprimir</button>
     <button class="btn" id="btnCorregir" type="button" style="display:none">Corregir</button>
     <button class="btn rojo" id="btnAnular" type="button" style="display:none">Anular</button>
   </div>
   <div id="cont"><div class="msg">Cargando la auditoría…</div></div>
-  <div id="fotosCont"></div>
 </div>
-<div class="zoom" id="zoom"><img id="zoomImg" alt=""></div>
+<div id="fotosOverlay" role="dialog" aria-label="Fotos de la auditoría">
+  <div class="fobar">
+    <h2 id="fotosOverlayTitulo">Fotos</h2>
+    <div class="facts">
+      <button type="button" class="fprint" id="btnImprimirFotos">🖨 Imprimir fotos</button>
+      <button type="button" class="fclose" id="btnCerrarFotos">✕ Cerrar</button>
+    </div>
+  </div>
+  <nav class="fotabs" id="fotosTabs"></nav>
+  <div class="fowrap" id="fotosOverlayBody"></div>
+</div>
 
 <script>
 const SB='https://xxfufpddgoyhbotjmaiy.supabase.co';
@@ -816,18 +854,79 @@ function pintar(){
   const puede=D.puede && !anul;
   $('btnCorregir').style.display=puede?'':'none'; $('btnAnular').style.display=puede?'':'none';
 }
+/* ===== Fotos: ventana propia (igual que Auditoría Final), con pestañas por tipo, fotos grandes, girar, zoom
+   e "Imprimir fotos" (una foto por hoja A4). El reporte y su PDF quedan solo con la hoja FO-256. ===== */
+const NOMG={ESTAMPADO:'Estampado',BORDADO:'Bordado',LAVANDERIA:'Lavandería'};
+let FOTOS_CAT=[], FOTOS_URL={};
 async function pintarFotos(){
-  const fotos=D.fotos||[]; if(!fotos.length){ $('fotosCont').innerHTML=''; return; }
-  const url=await firmar(fotos.map(f=>f.ruta));
-  const et=f=>f.tipo==='MEDIDAS'?'Hoja de medidas':(f.tipo==='DEFECTO'?(({ESTAMPADO:'Estampado',BORDADO:'Bordado',LAVANDERIA:'Lavandería'}[f.grupo]||cap(f.grupo))+' · '+f.defecto):'Prenda / arte');
-  $('fotosCont').innerHTML='<div class="fotosHoja"><div class="sec">Fotos de la auditoría '+esc(D.auditoria.id)+' ('+fotos.length+')</div><div class="galeria">'+
-    fotos.map(f=>'<figure>'+(url[f.ruta]?'<img crossorigin="anonymous" src="'+esc(url[f.ruta])+'" alt="'+esc(et(f))+'">':'<div style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;color:var(--stone)">Sin vista</div>')+'<figcaption>'+esc(et(f))+'</figcaption></figure>').join('')+'</div></div>';
+  const fotos=D.fotos||[]; $('btnFotos').style.display='none'; if(!fotos.length) return;
+  FOTOS_URL=await firmar(fotos.map(f=>f.ruta));
+  const cant={}; (D.defectos||[]).forEach(d=>{ cant[d.grupo+'|'+d.defecto]=d.cantidad; });
+  const def=fotos.filter(f=>f.tipo==='DEFECTO').map(f=>({ruta:f.ruta,tag:(NOMG[f.grupo]||cap(f.grupo))+' · '+f.defecto+(cant[f.grupo+'|'+f.defecto]?(' ('+cant[f.grupo+'|'+f.defecto]+')'):'')}));
+  const gen=fotos.filter(f=>f.tipo==='GENERAL').map(f=>({ruta:f.ruta,tag:'Prenda / arte'}));
+  const med=fotos.filter(f=>f.tipo==='MEDIDAS').map(f=>({ruta:f.ruta,tag:'Hoja de medidas'}));
+  FOTOS_CAT=[{id:'def',nombre:'Defectos',datos:def},{id:'gen',nombre:'Prenda / arte',datos:gen},{id:'med',nombre:'Medidas',datos:med}].filter(c=>c.datos.length);
+  $('btnFotos').textContent='🖼 Fotos ('+fotos.length+')'; $('btnFotos').style.display='';
 }
-$('fotosCont').addEventListener('click',e=>{ const im=e.target.closest('.galeria img'); if(!im) return; $('zoomImg').src=im.src; $('zoom').style.display='flex'; });
-$('zoom').addEventListener('click',()=>{ $('zoom').style.display='none'; });
+function abrirVerFotos(){
+  if(!FOTOS_CAT.length){ alert('Esta auditoría no tiene fotos.'); return; }
+  $('fotosTabs').innerHTML=FOTOS_CAT.map((c,i)=>'<button type="button" class="ftab'+(i===0?' on':'')+'" data-cat="'+c.id+'">'+esc(c.nombre)+' ('+c.datos.length+')</button>').join('');
+  $('fotosTabs').style.display=FOTOS_CAT.length>1?'flex':'none';
+  mostrarCategoriaFotos(FOTOS_CAT[0].id);
+  $('fotosOverlay').classList.add('show'); $('fotosOverlay').scrollTop=0;
+  document.body.classList.add('viendoFotos');
+  if(!$('fotosPageStyle')){ const st=document.createElement('style'); st.id='fotosPageStyle'; st.textContent='@media print{ @page{ size:A4 portrait; margin:0; } }'; document.head.appendChild(st); }
+}
+function mostrarCategoriaFotos(id){
+  const cat=FOTOS_CAT.find(c=>c.id===id); if(!cat) return;
+  document.querySelectorAll('.ftab').forEach(b=>b.classList.toggle('on',b.dataset.cat===id));
+  $('fotosOverlayTitulo').textContent=cat.nombre+' · '+D.auditoria.id+' · OP '+(D.auditoria.op||'');
+  let h='<div class="fotip">Si una foto sale de lado o de cabeza, usa "⟳ Girar". Con la rueda del mouse o doble toque puedes acercar. Lo que ves aquí es lo que se imprime: una foto por hoja.</div>';
+  cat.datos.forEach((f,i)=>{
+    h+='<figure class="hojaF" data-deg="0"><div class="lab"><span>'+esc(f.tag)+(cat.datos.length>1?(' · '+(i+1)+'/'+cat.datos.length):'')+'</span>'+
+       '<button type="button" class="girar">⟳ Girar</button></div>'+
+       '<div class="imgbox">'+(FOTOS_URL[f.ruta]?'<img src="'+esc(FOTOS_URL[f.ruta])+'" alt="'+esc(f.tag)+'" data-deg="0" data-escala="1">':'<div style="padding:40px;color:#5F726C">No se pudo cargar esta foto.</div>')+'</div></figure>';
+  });
+  $('fotosOverlayBody').innerHTML=h;
+  activarZoomFotos();
+}
+function cerrarFotosOverlay(){
+  $('fotosOverlay').classList.remove('show'); document.body.classList.remove('viendoFotos');
+  const st=$('fotosPageStyle'); if(st) st.remove();
+}
+/* Gira y acerca la foto grande; recalcula el tamaño real para que la caja se acomode (igual que Auditoría Final) */
+function aplicarTransformFoto(img){
+  const deg=parseInt(img.getAttribute('data-deg'))||0, escala=parseFloat(img.getAttribute('data-escala'))||1, rotado=(deg===90||deg===270), box=img.closest('.imgbox');
+  if(img.naturalWidth && img.naturalHeight){
+    const dispW=rotado?window.innerHeight*0.78:Math.min(window.innerWidth*0.92,1000), dispH=rotado?Math.min(window.innerWidth*0.92,1000):window.innerHeight*0.78;
+    const k=(rotado?Math.min(dispW/img.naturalHeight,dispH/img.naturalWidth):Math.min(dispW/img.naturalWidth,dispH/img.naturalHeight))*escala;
+    const w0=img.naturalWidth*k, h0=img.naturalHeight*k;
+    img.style.width=w0+'px'; img.style.height=h0+'px';
+    if(box){ box.style.width=(rotado?h0:w0)+'px'; box.style.height=(rotado?w0:h0)+'px'; box.style.overflow='hidden'; }
+  }
+  img.style.transform='rotate('+deg+'deg)';
+}
+function activarZoomFotos(){
+  document.querySelectorAll('#fotosOverlayBody .imgbox img').forEach(img=>{
+    img.style.cursor='zoom-in';
+    if(img.complete) aplicarTransformFoto(img); else img.addEventListener('load',()=>aplicarTransformFoto(img));
+    img.addEventListener('dblclick',()=>{ const n=(parseFloat(img.getAttribute('data-escala'))||1)>1?1:2.5; img.setAttribute('data-escala',n); img.style.cursor=n>1?'zoom-out':'zoom-in'; aplicarTransformFoto(img); });
+    img.addEventListener('wheel',e=>{ e.preventDefault(); let c=parseFloat(img.getAttribute('data-escala'))||1; c=Math.max(1,Math.min(3,c+(e.deltaY<0?0.2:-0.2))); img.setAttribute('data-escala',c); img.style.cursor=c>1?'zoom-out':'zoom-in'; aplicarTransformFoto(img); },{passive:false});
+  });
+}
+$('fotosOverlayBody').addEventListener('click',e=>{ const b=e.target.closest('.girar'); if(!b) return; const fig=b.closest('figure'), img=fig.querySelector('img'); if(!img) return;
+  const d=((parseInt(img.getAttribute('data-deg'))||0)+90)%360; img.setAttribute('data-deg',d); fig.setAttribute('data-deg',d); aplicarTransformFoto(img); });
+$('fotosTabs').addEventListener('click',e=>{ const b=e.target.closest('.ftab'); if(b){ mostrarCategoriaFotos(b.dataset.cat); $('fotosOverlay').scrollTop=0; } });
+$('btnFotos').addEventListener('click',abrirVerFotos);
+$('btnCerrarFotos').addEventListener('click',cerrarFotosOverlay);
+$('btnImprimirFotos').addEventListener('click',()=>window.print());
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('fotosOverlay').classList.contains('show')) cerrarFotosOverlay(); });
+/* Antes de imprimir manda el CSS en milímetros; después se recalcula para la pantalla */
+window.addEventListener('beforeprint',()=>{ document.querySelectorAll('#fotosOverlayBody .imgbox').forEach(box=>{ const img=box.querySelector('img'); if(img){ img.setAttribute('data-escala','1'); img.style.width=img.style.height=img.style.transform=''; } box.style.width=box.style.height=''; }); });
+window.addEventListener('afterprint',()=>{ document.querySelectorAll('#fotosOverlayBody .imgbox img').forEach(img=>aplicarTransformFoto(img)); });
 $('btnImprimir').addEventListener('click',()=>window.print());
 
-/* PDF: hoja FO-256 en una A4 vertical y, si hay fotos, las siguientes páginas con las fotos.
+/* PDF: hoja FO-256 en una A4 vertical (las fotos se ven e imprimen aparte, en el botón Fotos).
    Se comparte por el menú del equipo (WhatsApp, correo); si no se puede, se descarga. */
 async function compartirPdf(){
   const b=$('btnPdf'); if(!D||!D.ok||b.disabled) return;
@@ -837,17 +936,6 @@ async function compartirPdf(){
     const pdf=new window.jspdf.jsPDF('p','mm','a4'); const W=210,H=297,M=8;
     const pagina=(cv,primera)=>{ const k=Math.min((W-2*M)/cv.width,(H-2*M)/cv.height); if(!primera) pdf.addPage(); pdf.addImage(cv.toDataURL('image/jpeg',0.9),'JPEG',(W-cv.width*k)/2,M,cv.width*k,cv.height*k); };
     pagina(await html2canvas($('cont'),{scale:2,backgroundColor:'#ffffff',useCORS:true,windowWidth:980}),true);
-    const gal=document.querySelector('.fotosHoja');
-    if(gal){
-      const figs=[...gal.querySelectorAll('figure')];
-      for(let i=0;i<figs.length;i+=12){
-        const tmp=document.createElement('div'); tmp.className='fotosHoja'; tmp.style.cssText='position:absolute;left:-10000px;top:0;width:900px;box-shadow:none';
-        tmp.innerHTML='<div class="sec">Fotos de la auditoría '+esc(D.auditoria.id)+(figs.length>12?' ('+(i/12+1)+')':'')+'</div><div class="galeria" style="grid-template-columns:repeat(3,1fr)"></div>';
-        figs.slice(i,i+12).forEach(f=>tmp.querySelector('.galeria').appendChild(f.cloneNode(true)));
-        document.body.appendChild(tmp);
-        try{ pagina(await html2canvas(tmp,{scale:1.6,backgroundColor:'#ffffff',useCORS:true,windowWidth:980}),false); } finally{ tmp.remove(); }
-      }
-    }
     const a=D.auditoria, nombre='Auditoria_Artes_'+a.id+'_'+String(a.op||'')+'_'+String(a.fecha||'').slice(0,10)+'.pdf';
     const file=new File([pdf.output('blob')],nombre,{type:'application/pdf'});
     if(navigator.canShare && navigator.canShare({files:[file]})){
