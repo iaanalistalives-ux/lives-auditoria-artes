@@ -819,7 +819,7 @@ function pintar(){
 async function pintarFotos(){
   const fotos=D.fotos||[]; if(!fotos.length){ $('fotosCont').innerHTML=''; return; }
   const url=await firmar(fotos.map(f=>f.ruta));
-  const et=f=>f.tipo==='MEDIDAS'?'Hoja de medidas':(f.tipo==='DEFECTO'?(cap(f.grupo)+' · '+f.defecto):'Prenda / arte');
+  const et=f=>f.tipo==='MEDIDAS'?'Hoja de medidas':(f.tipo==='DEFECTO'?(({ESTAMPADO:'Estampado',BORDADO:'Bordado',LAVANDERIA:'Lavandería'}[f.grupo]||cap(f.grupo))+' · '+f.defecto):'Prenda / arte');
   $('fotosCont').innerHTML='<div class="fotosHoja"><div class="sec">Fotos de la auditoría '+esc(D.auditoria.id)+' ('+fotos.length+')</div><div class="galeria">'+
     fotos.map(f=>'<figure>'+(url[f.ruta]?'<img crossorigin="anonymous" src="'+esc(url[f.ruta])+'" alt="'+esc(et(f))+'">':'<div style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;color:var(--stone)">Sin vista</div>')+'<figcaption>'+esc(et(f))+'</figcaption></figure>').join('')+'</div></div>';
 }
