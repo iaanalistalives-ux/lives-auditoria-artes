@@ -644,6 +644,7 @@ td.obs{max-width:240px;color:#555}
 .btn.vpdf{padding:4px 12px;min-height:32px;font-size:12px;white-space:nowrap}
 .dg{white-space:nowrap;font-size:12px;color:var(--stone)}
 .dg b{color:var(--rose)}
+.cam{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--sage-dark);background:#E7F4EF;border-radius:20px;padding:2px 9px;white-space:nowrap}
 .lsTope500{font-size:12px;color:#5F726C;text-align:center;padding:8px 0}
 .vacio{padding:26px 10px;text-align:center;color:var(--stone);font-size:14px}
 .errBox{background:#FBE9E9;border:1px solid var(--rose);border-radius:8px;padding:12px 16px;color:var(--rose);font-size:13px;margin-bottom:14px;display:none}
@@ -696,7 +697,7 @@ body.modalAbierta{overflow:hidden}
     <label>Servicio<select id="fServ"><option value="">Todos</option></select></label>
     <label>Auditora<select id="fAud"><option value="">Todas</option></select></label>
     <label>Resultado<select id="fRes"><option value="">Todos</option><option value="APROBADO">Aprobado</option><option value="PASE">Aprobado con pase</option><option value="RECHAZADO">Rechazado</option></select></label>
-    <label>Buscar<input type="search" id="fQ" placeholder="OP, grupo, estilo, color, código…"></label>
+    <label>Buscar<input type="search" id="fQ" placeholder="OP, grupo, estilo, color…"></label>
     <button class="btn" id="btnLimpiar" type="button">Limpiar</button>
     <span class="spacer"></span>
     <div class="lsAcc"><button class="btn" id="btnImprimir" type="button">Imprimir</button></div>
@@ -705,9 +706,9 @@ body.modalAbierta{overflow:hidden}
   <div class="panel">
     <span class="tira"></span>
     <div class="pt">Auditorías de Artes</div>
-    <div class="ph" id="ph">Una fila por lote auditado (reporte FO-256), lo más reciente arriba. Defectos E/B/L = estampado / bordado / lavandería. Toca Ver PDF (o la fila) para ver el reporte.</div>
+    <div class="ph" id="ph">Una fila por lote auditado (reporte FO-256), lo más reciente arriba. Defectos E/B/L = estampado / bordado / lavandería. 📷 = la auditoría tiene fotos. Toca Ver PDF (o la fila) para ver el reporte con sus fotos.</div>
     <div class="tscroll"><table>
-      <thead><tr><th>Fecha</th><th>Código</th><th>OP</th><th>Grupo</th><th>Estilo</th><th>Color</th><th>Servicio</th><th class="n">Lote</th><th class="n">Muestra</th><th>AQL</th><th>Defectos E/B/L</th><th class="n">Total def.</th><th>Medidas</th><th>Auditora</th><th>Resultado</th><th>Reporte</th></tr></thead>
+      <thead><tr><th>Fecha</th><th>OP</th><th>Grupo</th><th>Estilo</th><th>Color</th><th>Servicio</th><th class="n">Lote</th><th class="n">Muestra</th><th>AQL</th><th>Defectos E/B/L</th><th class="n">Total def.</th><th>Medidas</th><th>Auditora</th><th>Resultado</th><th>Fotos</th><th>Reporte</th></tr></thead>
       <tbody id="tbody"></tbody>
     </table></div>
     <div id="vacio" class="vacio" style="display:none"></div>
@@ -802,7 +803,7 @@ async function cargar(desde){
   const opts=(sel,vals,todos)=>{ const act=$(sel).value; const u=[...new Set(vals.filter(Boolean))].sort();
     $(sel).innerHTML='<option value="">'+todos+'</option>'+u.map(x=>'<option'+(x===act?' selected':'')+'>'+esc(x)+'</option>').join(''); };
   opts('fServ',FILAS.map(f=>f.servicio),'Todos'); opts('fAud',FILAS.map(f=>f.auditor),'Todas');
-  $('ph').textContent='Una fila por lote auditado (reporte FO-256), lo más reciente arriba'+(DESDE_CARGADO?(' · desde el '+fFecha(DESDE_CARGADO)+' (elige otra fecha en Desde para ver antes)'):'')+'. Defectos E/B/L = estampado / bordado / lavandería. Toca Ver PDF (o la fila) para ver el reporte.';
+  $('ph').textContent='Una fila por lote auditado (reporte FO-256), lo más reciente arriba'+(DESDE_CARGADO?(' · desde el '+fFecha(DESDE_CARGADO)+' (elige otra fecha en Desde para ver antes)'):'')+'. Defectos E/B/L = estampado / bordado / lavandería. 📷 = la auditoría tiene fotos. Toca Ver PDF (o la fila) para ver el reporte con sus fotos.';
   render();
 }
 function filtrar(){
@@ -817,12 +818,13 @@ function render(){
   const n=VISTAS.length, lista=hayFiltro()?VISTAS:VISTAS.slice(0,500);
   $('tbody').innerHTML=lista.map(f=>{ const e=estado(f);
     const med=f.resultado_medidas?('<span class="st '+(f.resultado_medidas==='RECHAZADO'?'re':'ap')+'">'+f.def_medidas+' de '+f.muestra_medidas+'</span>'):'—';
-    return '<tr data-id="'+esc(f.id)+'"><td data-l="Fecha">'+fFecha(f.fecha)+'</td><td data-l="Código"><b>'+esc(f.id)+'</b></td><td data-l="OP">'+esc(f.op)+'</td>'+
+    return '<tr data-id="'+esc(f.id)+'"><td data-l="Fecha">'+fFecha(f.fecha)+'</td><td data-l="OP"><b>'+esc(f.op)+'</b></td>'+
       '<td data-l="Grupo">'+esc(f.grupo)+'</td><td data-l="Estilo">'+esc(f.estilo)+'</td><td data-l="Color">'+esc(f.color)+'</td><td data-l="Servicio">'+esc(f.servicio)+'</td>'+
       '<td class="n" data-l="Lote">'+num(f.lote)+'</td><td class="n" data-l="Muestra">'+num(f.muestra)+'</td><td data-l="AQL">'+esc(f.nivel_aql)+'</td>'+
       '<td data-l="Defectos E/B/L"><span class="dg">'+[f.def_est,f.def_bor,f.def_lav].map(x=>x?'<b>'+x+'</b>':'0').join(' / ')+'</span></td>'+
       '<td class="n" data-l="Total def.">'+num(f.total_def)+' <span class="dg">(≤'+f.acepta+')</span></td><td data-l="Medidas">'+med+'</td><td data-l="Auditora">'+esc(f.auditor)+'</td>'+
       '<td data-l="Resultado"><span class="st '+e[0]+'">'+e[1]+'</span></td>'+
+      '<td data-l="Fotos">'+(+f.n_fotos?'<span class="cam" title="'+f.n_fotos+' foto(s): se ven en el reporte">📷 '+f.n_fotos+'</span>':'<span class="dg">—</span>')+'</td>'+
       '<td data-l="Reporte"><button type="button" class="btn vpdf" title="Ver el reporte FO-256 y compartirlo en PDF">Ver PDF</button></td></tr>'; }).join('');
   $('vacio').style.display=n?'none':'block';
   $('vacio').textContent=FILAS.length?'No hay auditorías con estos filtros. Cambia o limpia los filtros.':'Todavía no hay auditorías de Artes registradas en este período.';
