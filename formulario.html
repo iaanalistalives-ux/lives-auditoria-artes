@@ -654,7 +654,7 @@ input::placeholder,textarea::placeholder{font-weight:400;color:#9AA8A3}
 .subRow{display:flex;align-items:center;gap:8px;padding:8px 2px;border-bottom:1px dashed var(--line)}
 .subRow:last-child{border-bottom:none}
 .subRow.con .subLabel{font-weight:700;color:var(--navy)}
-.subLabel{flex:1;font-size:14px;color:var(--ink);line-height:1.3}
+.subLabel{flex:1;min-width:0;overflow-wrap:anywhere;font-size:14px;color:var(--ink);line-height:1.3}
 .subLabel small{display:block;font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
 .subRow .qty{display:flex;align-items:center;gap:4px;flex-shrink:0}
 .subRow .qty button{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:18px;font-weight:700;color:var(--navy);cursor:pointer;line-height:1}
@@ -703,7 +703,7 @@ input::placeholder,textarea::placeholder{font-weight:400;color:#9AA8A3}
 .fotoItem img{width:100%;height:100%;object-fit:cover;display:block}
 .fotoItem .del{position:absolute;top:3px;right:3px;background:rgba(220,38,38,.92);color:#fff;border:none;border-radius:50%;width:26px;height:26px;min-height:0;font-size:15px;line-height:1;cursor:pointer;font-weight:700;padding:0}
 textarea{resize:vertical}
-.aviso{display:none;position:sticky;top:0;z-index:52;padding:10px 14px;font-size:14px;align-items:center;justify-content:space-between;gap:10px}
+.aviso{display:none;position:relative;z-index:5;padding:10px 14px;font-size:14px;align-items:center;justify-content:space-between;gap:10px}
 .aviso button{flex-shrink:0;border:none;border-radius:8px;padding:8px 12px;min-height:40px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
 .misItem{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#fff;font-size:13.5px;line-height:1.5}
 .misItem b{color:var(--navy)}
@@ -716,6 +716,34 @@ textarea{resize:vertical}
 .overlay{display:none;position:fixed;inset:0;background:rgba(15,25,40,.55);z-index:9600;align-items:center;justify-content:center;padding:20px}
 .overlay .caja{background:#fff;border-radius:16px;max-width:380px;width:100%;padding:26px 22px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.25)}
 .overlay .caja button{width:100%;min-height:48px;margin-top:8px;border-radius:12px;font-weight:700;font-size:16px;cursor:pointer;font-family:inherit}
+/* Formulario por pestañas (estándar desde la Auditoría de Tintorería): lo que identifica arriba, fijo; cada sección en su pestaña */
+.corrDet{border:2px dashed #d4e0ee;background:#f7fafc;border-radius:12px;padding:0 14px;margin-bottom:14px}
+.corrDet>summary{min-height:44px;display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none;font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:1px;color:var(--navy)}
+.corrDet>summary::-webkit-details-marker{display:none}
+.corrDet>summary::before{content:"▸";color:var(--amber)}
+.corrDet[open]>summary::before{content:"▾"}
+.corrDet[open]{padding-bottom:14px}
+.btnRow{display:flex;gap:8px}
+.btnRow input{flex:1;min-width:0}
+.btnBuscar{width:auto;flex:none;padding:0 18px}
+.pFija{display:none;align-items:center;justify-content:space-between;gap:10px;font-weight:700;color:var(--navy);font-size:15px}
+.pFija button{min-height:44px;padding:0 14px;border-radius:9px;border:1px solid var(--line);background:#fbfcfd;color:var(--navy);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.card.compacta{padding:6px 14px}
+.card.compacta>.sec,.card.compacta>.field{display:none}
+.card.compacta .pFija{display:flex}
+.stick{position:sticky;top:0;z-index:35;background:var(--bg);margin:0 -16px 12px;padding:8px 16px}
+.chip{display:none;font-size:12.5px;font-weight:700;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px}
+.chip.on{display:block}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;flex:1 0 auto;min-height:44px;padding:10px 8px;border:1px solid var(--line);background:#fbfcfd;border-radius:9px;font-family:inherit;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap}
+.tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tab.tabErr::after{content:"";position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:var(--red)}
+.pane{display:none}
+.pane.on{display:block}
+.paneNav{display:flex;gap:8px;margin:2px 0 14px}
+.paneNav button{flex:1;min-height:44px;border-radius:9px;border:1px solid var(--line);background:#fbfcfd;color:var(--navy);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.paneNav button.sig{background:var(--green);border-color:var(--green);color:#fff}
 #selloVersion{text-align:center;font-size:11px;color:#9aa5b1;padding:10px 8px 22px}
 @media(max-width:340px){.grid{grid-template-columns:1fr}}
 </style>
@@ -730,143 +758,164 @@ textarea{resize:vertical}
   <span>💾 Continuando tu auditoría en progreso</span>
   <button type="button" id="descartarBorrador" style="background:#fff;color:#c32030">Empezar de cero</button>
 </div>
+<div class="aviso" id="modoEdicion" style="background:#fff4e0;color:#7a5a12;border-bottom:1px solid #F59E0B">
+  <span>✏️ Estás corrigiendo la auditoría <b id="editId"></b></span>
+  <button type="button" id="btnCancelEdit" style="background:#fff;color:#c32030;border:1px solid #DC2626">Cancelar corrección</button>
+</div>
 <div class="wrap">
-  <!-- CORREGIR -->
-  <div class="card" id="panelMis" style="border:2px dashed #d4e0ee;background:#f7fafc">
-    <div class="sec"><span class="dot"></span>¿Necesitas corregir una auditoría que ya hiciste?</div>
-    <div class="grid"><div class="full"><label for="misOp">OP</label><input id="misOp" inputmode="numeric" autocomplete="off" placeholder="Ej. 24978"></div></div>
-    <button class="addbtn" id="btnMis" type="button" style="margin-top:8px">📋 Ver auditorías</button>
+  <!-- CORREGIR (siempre a la vista, en una línea) -->
+  <details class="corrDet" id="panelMis">
+    <summary>¿Corregir una auditoría?</summary>
+    <div class="btnRow"><input id="misOp" inputmode="numeric" autocomplete="off" placeholder="Escribe la OP"><button class="addbtn btnBuscar" id="btnMis" type="button">Ver</button></div>
     <div id="misList" style="margin-top:10px;max-height:55vh;overflow-y:auto"></div>
-    <div id="modoEdicion" style="display:none;margin-top:10px;padding:10px 12px;background:#fff4e0;border:1px solid #F59E0B;border-radius:10px;font-size:13.5px;color:#7a5a12">
-      ✏️ <b>Estás corrigiendo la auditoría <span id="editId"></span>.</b> Cambia lo que necesites abajo y guarda.
-      <button class="addbtn" id="btnCancelEdit" type="button" style="margin-top:8px;background:#fff;color:#c32030;border:1px solid #DC2626">Cancelar corrección</button>
-    </div>
-  </div>
+  </details>
 
-  <!-- CABECERA -->
-  <div class="card">
-    <div class="sec"><span class="dot"></span>Datos de la auditoría</div>
+  <!-- OP (siempre a la vista; elegida, queda en una línea) -->
+  <div class="card" id="cardOp">
+    <div class="sec"><span class="dot"></span>OP de la auditoría</div>
     <div class="field" id="fOp"><label for="opInput">OP (Orden de Producción) *</label>
       <input id="opInput" inputmode="numeric" autocomplete="off" placeholder="70085">
       <div class="hint" id="opHint">Escríbela y los datos del pedido salen solos de la base de OPs.</div>
       <div class="msgErr">Escribe una OP que exista en la base de OPs.</div>
     </div>
-    <div id="opSelector" style="display:none;margin:-4px 0 10px;padding:10px 12px;background:#fff4e0;border:1px solid #F59E0B;border-radius:10px">
+    <div id="opSelector" style="display:none;margin:-4px 0 4px;padding:10px 12px;background:#fff4e0;border:1px solid #F59E0B;border-radius:10px">
       <div id="opSelectorTitulo" style="font-size:12.5px;font-weight:700;color:#7a5a12;margin-bottom:8px">Esta OP tiene varias opciones — toca la que corresponde:</div>
       <div id="opSelectorList"></div>
     </div>
-    <div class="grid">
-      <div><label>Grupo</label><input id="grupo" readonly placeholder="Sale de la OP"></div>
-      <div><label>Cliente</label><input id="cliente" readonly placeholder="Sale del grupo"></div>
-      <div><label>Estilo LIVES</label><input id="estilo" readonly placeholder="Sale de la OP"></div>
-      <div><label>Estilo cliente</label><input id="eCliente" readonly placeholder="Sale de la OP"></div>
-      <div><label>PO</label><input id="po" readonly placeholder="Sale de la OP"></div>
-      <div><label>Color</label><input id="color" readonly placeholder="Sale de la OP"></div>
-      <div><label>Destino</label><input id="destino" readonly placeholder="Sale de la OP"></div>
-      <div><label>Cant. pedido</label><input id="pedido" readonly placeholder="Sale de la OP"></div>
-      <div id="fLote"><label for="lote">Total recibido (lote) *</label><input id="lote" inputmode="numeric" placeholder="503">
-        <div class="hint">El lote que llegó para auditar.</div><div class="msgErr">Entre 2 y 10,000 prendas.</div></div>
-      <div id="fServ"><label for="servicio">Servicio *</label><input id="servicio" list="dlServ" autocomplete="off" placeholder="Estampadora, bordadora…">
-        <datalist id="dlServ"></datalist><div class="msgErr">Escribe el servicio.</div></div>
-      <div class="full" id="fAud"><label>Auditora (se toma de tu usuario)</label><input id="auditor" readonly placeholder="—"><div class="msgErr">Identifícate para registrar.</div></div>
-      <div class="full"><label>Fecha (automática)</label><input id="fecha" type="date" readonly></div>
+    <div class="pFija"><span>✔ OP <b id="pFijaTx"></b></span><button type="button" id="btnCambiarOp">Cambiar</button></div>
+  </div>
+
+  <div id="centinela"></div>
+  <div class="stick" id="stick">
+    <div class="chip" id="chipOp"></div>
+    <nav class="tabs" id="tabs" role="tablist">
+      <button type="button" class="tab on" role="tab" data-t="0">Lote</button>
+      <button type="button" class="tab" role="tab" data-t="1">Defectos</button>
+      <button type="button" class="tab" role="tab" data-t="2">Medidas</button>
+      <button type="button" class="tab" role="tab" data-t="3">Fotos</button>
+      <button type="button" class="tab" role="tab" data-t="4">Cierre</button>
+    </nav>
+  </div>
+
+  <!-- 1. LOTE -->
+  <div class="pane on" data-pane="0">
+    <div class="card">
+      <div class="sec"><span class="dot"></span>Datos del lote</div>
+      <div class="grid">
+        <div><label>Grupo</label><input id="grupo" readonly placeholder="Sale de la OP"></div>
+        <div><label>Cliente</label><input id="cliente" readonly placeholder="Sale del grupo"></div>
+        <div><label>Estilo LIVES</label><input id="estilo" readonly placeholder="Sale de la OP"></div>
+        <div><label>Estilo cliente</label><input id="eCliente" readonly placeholder="Sale de la OP"></div>
+        <div><label>PO</label><input id="po" readonly placeholder="Sale de la OP"></div>
+        <div><label>Color</label><input id="color" readonly placeholder="Sale de la OP"></div>
+        <div><label>Destino</label><input id="destino" readonly placeholder="Sale de la OP"></div>
+        <div><label>Cant. pedido</label><input id="pedido" readonly placeholder="Sale de la OP"></div>
+        <div id="fLote"><label for="lote">Total recibido (lote) *</label><input id="lote" inputmode="numeric" placeholder="503">
+          <div class="hint">El lote que llegó para auditar.</div><div class="msgErr">Entre 2 y 10,000 prendas.</div></div>
+        <div id="fServ"><label for="servicio">Servicio *</label><input id="servicio" list="dlServ" autocomplete="off" placeholder="Estampadora, bordadora…">
+          <datalist id="dlServ"></datalist><div class="msgErr">Escribe el servicio.</div></div>
+        <div class="full" id="fAud"><label>Auditora (se toma de tu usuario)</label><input id="auditor" readonly placeholder="—"><div class="msgErr">Identifícate para registrar.</div></div>
+        <div class="full"><label>Fecha (automática)</label><input id="fecha" type="date" readonly></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="sec"><span class="dot"></span>Nivel AQL · muestreo</div>
+      <div class="field"><label>Nivel AQL</label>
+        <div class="seg" id="segA"><button type="button" data-v="1.0">1.0</button><button type="button" data-v="1.5" class="on">1.5</button><button type="button" data-v="2.5">2.5</button></div>
+      </div>
+      <div class="aql">
+        <div class="cell"><div class="k">Lote</div><div class="v" id="aLote">—</div></div>
+        <div class="cell"><div class="k">Muestra</div><div class="v" id="aMuestra">—</div></div>
+        <div class="cell acep"><div class="k">Acepta ≤</div><div class="v" id="aAcepta">—</div></div>
+        <div class="cell rech"><div class="k">Rechaza ≥</div><div class="v" id="aRechaza">—</div></div>
+      </div>
     </div>
   </div>
 
-  <!-- AQL -->
-  <div class="card">
-    <div class="sec"><span class="dot"></span>Nivel AQL · muestreo</div>
-    <div class="field"><label>Nivel AQL</label>
-      <div class="seg" id="segA"><button type="button" data-v="1.0">1.0</button><button type="button" data-v="1.5" class="on">1.5</button><button type="button" data-v="2.5">2.5</button></div>
+  <!-- 2. DEFECTOS -->
+  <div class="pane" data-pane="1">
+    <div class="card">
+      <div class="sec"><span class="dot"></span>Defectos de calidad</div>
+      <div class="hint" style="margin:-6px 0 10px">Busca el defecto que encontraste, o toca un grupo para ver todos sus defectos. 📷 toma la foto de ese defecto.</div>
+      <input id="buscarDef" type="search" autocomplete="off" placeholder="🔍 Busca el defecto (ej. mancha, tono, hilo...)" style="margin-bottom:8px">
+      <div id="resultadosDef" style="display:none;margin-bottom:10px;border:1px solid var(--line);border-radius:10px;padding:4px 10px"></div>
+      <div id="defChecklist"></div>
+      <div class="total-def"><span>Total de defectos</span><b id="totDef">0</b></div>
     </div>
-    <div class="aql">
-      <div class="cell"><div class="k">Lote</div><div class="v" id="aLote">—</div></div>
-      <div class="cell"><div class="k">Muestra</div><div class="v" id="aMuestra">—</div></div>
-      <div class="cell acep"><div class="k">Acepta ≤</div><div class="v" id="aAcepta">—</div></div>
-      <div class="cell rech"><div class="k">Rechaza ≥</div><div class="v" id="aRechaza">—</div></div>
-    </div>
-  </div>
-
-  <!-- DEFECTOS -->
-  <div class="card">
-    <div class="sec"><span class="dot"></span>Defectos de calidad</div>
-    <div class="hint" style="margin:-6px 0 10px">Busca el defecto que encontraste, o toca un grupo para ver todos sus defectos.</div>
-    <input id="buscarDef" type="search" autocomplete="off" placeholder="🔍 Busca el defecto (ej. mancha, tono, hilo...)" style="margin-bottom:8px">
-    <div id="resultadosDef" style="display:none;margin-bottom:10px;border:1px solid var(--line);border-radius:10px;padding:4px 10px"></div>
-    <div id="defChecklist"></div>
-    <div class="total-def"><span>Total de defectos</span><b id="totDef">0</b></div>
-  </div>
-
-  <!-- RESUMEN -->
-  <div class="card" id="resumenCard" style="display:none">
-    <div class="sec"><span class="dot"></span>Resumen de lo registrado</div>
-    <div class="hint" style="margin:-6px 0 10px">Revisa, corrige o borra rápido antes de guardar.</div>
-    <div id="resumenList"></div>
-  </div>
-
-  <!-- MEDIDAS -->
-  <div class="card">
-    <div class="sec"><span class="dot"></span>Medidas</div>
-    <div class="grid">
-      <div><label for="medMuestra">Muestra medidas</label><input id="medMuestra" inputmode="numeric" placeholder="—"></div>
-      <div id="fMedDef"><label for="medDef">Total def. medidas</label><input id="medDef" inputmode="numeric" placeholder="—"><div class="msgErr">Escribe el total (0 si no hubo).</div></div>
-    </div>
-    <div class="aql" id="medAql" style="display:none">
-      <div class="cell"><div class="k">Muestra</div><div class="v" id="mMuestra">—</div></div>
-      <div class="cell acep"><div class="k">Acepta ≤</div><div class="v" id="mAcepta">—</div></div>
-      <div class="cell rech"><div class="k">Rechaza ≥</div><div class="v" id="mRechaza">—</div></div>
-      <div class="cell"><div class="k">Medidas</div><div class="v" id="mRes" style="font-size:16px;margin-top:7px">—</div></div>
-    </div>
-    <div class="hint">Acepta/Rechaza sale de la tabla AQL con el mismo nivel, en la fila de la muestra de medidas. Si se rechaza, el lote sale rechazado.</div>
-  </div>
-
-  <!-- PASE AL RECHAZO -->
-  <div class="card ov-card" id="ovCard">
-    <div class="sec" style="color:#b7791f"><span class="dot" style="background:#b7791f"></span>Pase al rechazo</div>
-    <div class="toggle ovr">
-      <div><div style="font-weight:600;font-size:14px">Dar pase a un lote rechazado</div>
-        <div class="hint" style="margin-top:2px">Queda registrado como excepción, no como aprobación normal.</div></div>
-      <label class="switch"><input type="checkbox" id="ovSwitch"><span class="slider"></span></label>
-    </div>
-    <div class="ov" id="ovFields" style="margin-top:10px">
-      <div class="field" id="fOvWho"><label for="ovWho">¿Quién autoriza? *</label><input id="ovWho" placeholder="Ej. Jefa de Calidad"><div class="msgErr">Escribe quién autoriza.</div></div>
-      <div class="field" id="fOvWhy"><label for="ovWhy">Motivo *</label><textarea id="ovWhy" rows="2" placeholder="Ej. El cliente aceptó la diferencia de tono"></textarea><div class="msgErr">Escribe el motivo.</div></div>
+    <div class="card" id="resumenCard" style="display:none">
+      <div class="sec"><span class="dot"></span>Resumen de lo registrado</div>
+      <div class="hint" style="margin:-6px 0 10px">Revisa, corrige o borra rápido antes de guardar.</div>
+      <div id="resumenList"></div>
     </div>
   </div>
 
-  <!-- FOTOS -->
-  <div class="card">
-    <div class="sec"><span class="dot"></span>Fotos de hojas de medidas</div>
-    <div class="hint" style="margin:-6px 0 10px">Opcional.</div>
-    <div class="fotos" id="fotosMed"></div>
-    <div class="fotoBtns">
-      <label class="fotoBtn">📷 Tomar foto<input type="file" accept="image/*" capture="environment" id="inMed" hidden></label>
-      <label class="fotoBtn">🖼️ Elegir de galería<input type="file" accept="image/*" id="inMedGal" multiple hidden></label>
+  <!-- 3. MEDIDAS -->
+  <div class="pane" data-pane="2">
+    <div class="card">
+      <div class="sec"><span class="dot"></span>Medidas</div>
+      <div class="grid">
+        <div><label for="medMuestra">Muestra medidas</label><input id="medMuestra" inputmode="numeric" placeholder="—"></div>
+        <div id="fMedDef"><label for="medDef">Total def. medidas</label><input id="medDef" inputmode="numeric" placeholder="—"><div class="msgErr">Escribe el total (0 si no hubo).</div></div>
+      </div>
+      <div class="aql" id="medAql" style="display:none">
+        <div class="cell"><div class="k">Muestra</div><div class="v" id="mMuestra">—</div></div>
+        <div class="cell acep"><div class="k">Acepta ≤</div><div class="v" id="mAcepta">—</div></div>
+        <div class="cell rech"><div class="k">Rechaza ≥</div><div class="v" id="mRechaza">—</div></div>
+        <div class="cell"><div class="k">Medidas</div><div class="v" id="mRes" style="font-size:16px;margin-top:7px">—</div></div>
+      </div>
+      <div class="hint">Acepta/Rechaza sale de la tabla AQL con el mismo nivel, en la fila de la muestra de medidas. Si se rechaza, el lote sale rechazado.</div>
     </div>
-    <div class="hint" id="medCount">0 fotos · máximo 10</div>
-  </div>
-  <div class="card">
-    <div class="sec"><span class="dot"></span>Fotos de la prenda y del arte</div>
-    <div class="hint" style="margin:-6px 0 10px">Opcional. Las fotos de cada defecto se toman con 📷 en su fila.</div>
-    <div class="fotos" id="fotosGen"></div>
-    <div class="fotoBtns">
-      <label class="fotoBtn">📷 Tomar foto<input type="file" accept="image/*" capture="environment" id="inGen" hidden></label>
-      <label class="fotoBtn">🖼️ Elegir de galería<input type="file" accept="image/*" id="inGenGal" multiple hidden></label>
-    </div>
-    <div class="hint" id="genCount">0 fotos · máximo 10</div>
   </div>
 
-  <!-- COMENTARIO -->
-  <div class="card">
-    <div class="sec"><span class="dot"></span>Comentarios</div>
-    <textarea id="comentario" rows="3" placeholder="Observaciones generales de la auditoría (opcional)"></textarea>
+  <!-- 4. FOTOS -->
+  <div class="pane" data-pane="3">
+    <div class="card">
+      <div class="sec"><span class="dot"></span>Fotos de hojas de medidas</div>
+      <div class="hint" style="margin:-6px 0 10px">Opcional.</div>
+      <div class="fotos" id="fotosMed"></div>
+      <div class="fotoBtns">
+        <label class="fotoBtn">📷 Tomar foto<input type="file" accept="image/*" capture="environment" id="inMed" hidden></label>
+        <label class="fotoBtn">🖼️ Elegir de galería<input type="file" accept="image/*" id="inMedGal" multiple hidden></label>
+      </div>
+      <div class="hint" id="medCount">0 fotos · máximo 10</div>
+    </div>
+    <div class="card">
+      <div class="sec"><span class="dot"></span>Fotos de la prenda y del arte</div>
+      <div class="hint" style="margin:-6px 0 10px">Opcional. Las fotos de cada defecto se toman con 📷 en su fila, en la pestaña Defectos.</div>
+      <div class="fotos" id="fotosGen"></div>
+      <div class="fotoBtns">
+        <label class="fotoBtn">📷 Tomar foto<input type="file" accept="image/*" capture="environment" id="inGen" hidden></label>
+        <label class="fotoBtn">🖼️ Elegir de galería<input type="file" accept="image/*" id="inGenGal" multiple hidden></label>
+      </div>
+      <div class="hint" id="genCount">0 fotos · máximo 10</div>
+    </div>
+  </div>
+
+  <!-- 5. CIERRE -->
+  <div class="pane" data-pane="4">
+    <div class="card ov-card" id="ovCard">
+      <div class="sec" style="color:#b7791f"><span class="dot" style="background:#b7791f"></span>Pase al rechazo</div>
+      <div class="toggle ovr">
+        <div><div style="font-weight:600;font-size:14px">Dar pase a un lote rechazado</div>
+          <div class="hint" style="margin-top:2px">Queda registrado como excepción, no como aprobación normal.</div></div>
+        <label class="switch"><input type="checkbox" id="ovSwitch"><span class="slider"></span></label>
+      </div>
+      <div class="ov" id="ovFields" style="margin-top:10px">
+        <div class="field" id="fOvWho"><label for="ovWho">¿Quién autoriza? *</label><input id="ovWho" placeholder="Ej. Jefa de Calidad"><div class="msgErr">Escribe quién autoriza.</div></div>
+        <div class="field" id="fOvWhy"><label for="ovWhy">Motivo *</label><textarea id="ovWhy" rows="2" placeholder="Ej. El cliente aceptó la diferencia de tono"></textarea><div class="msgErr">Escribe el motivo.</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="sec"><span class="dot"></span>Comentarios</div>
+      <textarea id="comentario" rows="4" placeholder="Observaciones generales de la auditoría (opcional)"></textarea>
+    </div>
   </div>
 </div>
 <div class="bar" id="barraFinal"><div class="inner">
   <div class="verdict" id="verdict"><div class="vk">Veredicto</div><div class="vv" id="vText">—</div><div class="vs" id="vSub"></div></div>
   <button class="save" id="save" type="button">Guardar</button>
 </div></div>
-<div id="selloVersion">v2026-10-28a · FO-256</div>
+<div id="selloVersion">v2026-10-28b · FO-256</div>
 <div class="toast" id="toast"></div>
 
 <div class="overlay" id="confirmOverlay"><div class="caja">
@@ -989,14 +1038,16 @@ async function cargarOPS(){
 /* ---------- identificarse (fuera del portal) ---------- */
 function abrirQuien(){
   if($('ovQuien')) return;
-  const pers=(INI&&INI.personas)||[];
+  const pers=(INI&&INI.personas)||[], regs=(INI&&INI.registran)||[];
   const ov=document.createElement('div'); ov.id='ovQuien';
   ov.style.cssText='position:fixed;inset:0;z-index:9700;background:rgba(14,59,54,.55);display:flex;align-items:center;justify-content:center;padding:16px';
   const bt='flex:1;min-height:44px;border-radius:10px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;';
   ov.innerHTML='<div role="dialog" aria-label="¿Quién eres?" style="background:#fff;color:#0E3B36;border-radius:14px;max-width:420px;width:100%;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.3)">'+
     '<div style="font-weight:700;font-size:18px;margin-bottom:4px">¿Quién eres?</div>'+
     '<div style="font-size:13px;color:#5F726C;margin-bottom:12px">Elige tu nombre. Se queda en este equipo y firma lo que registres.</div>'+
-    '<select id="qSel" style="margin-bottom:8px"><option value="">— Elige tu nombre —</option>'+pers.map(p=>'<option value="'+esc(p)+'">'+esc(p)+'</option>').join('')+'</select>'+
+    '<select id="qSel" style="margin-bottom:8px"><option value="">— Elige tu nombre —</option>'+
+      (regs.length?'<optgroup label="Quienes registran">'+regs.map(p=>'<option value="'+esc(p.usuario)+'">'+esc(p.nombre)+'</option>').join('')+'</optgroup>':'')+
+      '<optgroup label="Auditoras">'+pers.map(p=>'<option value="'+esc(p)+'">'+esc(p)+'</option>').join('')+'</optgroup></select>'+
     '<input id="qOtro" autocomplete="off" placeholder="Otra persona: escribe tu usuario (ej. ctalepcio)" style="margin-bottom:8px">'+
     '<div id="qErr" style="color:#DC2626;font-size:13px;min-height:18px;margin-bottom:6px"></div>'+
     '<div style="display:flex;gap:8px"><button type="button" id="qOk" style="'+bt+'border:none;background:#0F7A5A;color:#fff">Entrar</button>'+
@@ -1024,6 +1075,7 @@ function ponerOp(m){
   $('color').value=m?m.color:''; $('destino').value=m?m.destino:''; $('pedido').value=m&&m.pedido!=null?m.pedido:'';
   $('cliente').value=m?clienteDeGrupo(m.grupo):'';
   if(m){ $('opHint').className='hint'; $('opHint').textContent='✓ Datos completados desde la base de OPs.'; $('fOp').classList.remove('campoErr'); }
+  compactarOp(!!m);
 }
 let opTimer=null;
 function buscarOP(){
@@ -1312,7 +1364,11 @@ $('save').onclick=async()=>{
   if(!USUARIO){ abrirQuien(); return; }
   if(!(INI && INI.puede)){ toast(INI&&INI.supervision?'Modo supervisión: no se guarda nada':'Solo para quien registra','err'); return; }
   const f=faltantes();
-  if(f.length){ toast('Revisa los campos marcados en rojo','err'); const el=$(f[0]); el.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  if(f.length){ toast('Revisa los campos marcados en rojo','err'); refrescarMarcas();
+    const el=$(f[0]), k=paneDe(el);
+    if(k<0){ compactarOp(false); window.scrollTo({top:0,behavior:'smooth'}); }
+    else { irPestana(k); setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'center'}),60); }
+    return; }
   const sinFoto=Object.keys(S.defs).filter(k=>(+S.defs[k].cant||0)>0 && !S.defs[k].foto).length;
   if(sinFoto && !confirm(sinFoto+' defecto(s) sin foto. ¿Guardar igual?')) return;
   const p=armarPayload(), b=$('save'); b.disabled=true; b.textContent='Guardando…';
@@ -1336,7 +1392,7 @@ function confirmar(enviado,id,res){
   S.sucio=false; avisarPadre('sucio',{v:false}); if(enviado) avisarPadre('guardado',{id:id});
   borrarBorrador(); limpiar();
 }
-$('confirmOtra').onclick=()=>{ $('confirmOverlay').style.display='none'; window.scrollTo({top:0,behavior:'smooth'}); };
+$('confirmOtra').onclick=()=>{ $('confirmOverlay').style.display='none'; irPestana(0,false); window.scrollTo({top:0,behavior:'smooth'}); $('opInput').focus(); };
 $('confirmCerrar').onclick=()=>{ $('confirmOverlay').style.display='none'; if(EMBEBIDO) avisarPadre('cerrar'); };
 $('confirmVer').onclick=()=>{ const u=new URL('ver.html',location.href); u.searchParams.set('id',ULTIMO_ID); if(USUARIO&&NOMBRE_PORTAL) u.searchParams.set('usuario',USUARIO); if(EMBEBIDO) u.searchParams.set('modal','1'); location.href=u.toString(); };
 function limpiar(){
@@ -1347,6 +1403,7 @@ function limpiar(){
   $('modoEdicion').style.display='none'; $('borradorBar').style.display='none';
   document.querySelectorAll('.campoErr').forEach(x=>x.classList.remove('campoErr'));
   pintarFotos('med'); pintarFotos('gen'); refrescarDefectos(); recalc(); S.sucio=false;
+  TABS.forEach(t=>t.classList.remove('tabErr')); irPestana(0,false); compactarOp(false);
 }
 
 /* ===================== borrador en el equipo ===================== */
@@ -1365,7 +1422,7 @@ async function restaurarBorrador(){
   let b=null; try{ b=await idb(STORE_B,'readonly',s=>s.get('actual')); }catch(e){}
   if(!b || !hayAlgo(b)) return;
   aplicar(b);
-  if(b.editId){ $('editId').textContent=b.editId; $('modoEdicion').style.display='block'; }
+  if(b.editId){ $('editId').textContent=b.editId; $('modoEdicion').style.display='flex'; }
   $('borradorBar').style.display='flex'; S.sucio=true; avisarPadre('sucio',{v:true});
 }
 function aplicar(b){
@@ -1416,7 +1473,7 @@ async function cargarParaEditar(id){
     override:a.override,op:a.op,opSel:{op:a.op,grupo:a.grupo||'',estilo:a.estilo||'',eCliente:a.e_cliente||'',color:a.color||'',po:a.po||'',destino:a.destino||'',pedido:a.pedido,codTela:a.cod_tela||'',descTela:a.desc_tela||''},
     lote:a.lote,servicio:a.servicio,medMuestra:a.muestra_medidas||'',medDef:a.def_medidas==null?'':a.def_medidas,ovWho:a.override_autoriza||'',ovWhy:a.override_motivo||'',comentario:a.observacion||''});
   $('cliente').value=a.cliente||$('cliente').value;
-  $('editId').textContent=a.id; $('modoEdicion').style.display='block'; $('misList').innerHTML='';
+  $('editId').textContent=a.id; $('modoEdicion').style.display='flex'; $('misList').innerHTML=''; $('panelMis').open=false; irPestana(0,false);
   // miniaturas de las fotos ya guardadas
   const rutas=fotos.map(f=>f.ruta).concat((d.defectos||[]).map(x=>x.foto)).filter(Boolean);
   Object.assign(FIRMADAS,await firmar(rutas)); pintarFotos('med'); pintarFotos('gen'); refrescarDefectos();
@@ -1425,6 +1482,38 @@ async function cargarParaEditar(id){
 $('btnCancelEdit').onclick=()=>{ if(!confirm('¿Cancelar la corrección? No se guarda nada de lo cambiado.')) return; borrarBorrador(); limpiar(); avisarPadre('sucio',{v:false}); };
 
 window.addEventListener('beforeunload',e=>{ if(S.sucio){ guardarBorradorAhora(); } });
+/* ===================== pestañas ===================== */
+const PANES=Array.from(document.querySelectorAll('.pane')), TABS=Array.from(document.querySelectorAll('#tabs .tab'));
+function paneDe(el){ const p=el.closest('.pane'); return p?+p.dataset.pane:-1; }  /* -1 = parte fija de arriba (OP) */
+function irPestana(i,subir){
+  PANES.forEach((p,k)=>p.classList.toggle('on',k===i));
+  TABS.forEach((t,k)=>{ t.classList.toggle('on',k===i); t.setAttribute('aria-selected',k===i?'true':'false'); });
+  if(TABS[i]) TABS[i].scrollIntoView({block:'nearest',inline:'center'});
+  if(subir!==false){ const y=$('centinela').getBoundingClientRect().top+(window.scrollY||0); if((window.scrollY||0)>y) window.scrollTo({top:y}); }
+}
+/* La marca roja de una pestaña se quita sola cuando ya no le queda ningún campo con error */
+function refrescarMarcas(){ PANES.forEach((p,k)=>TABS[k].classList.toggle('tabErr',!!p.querySelector('.campoErr'))); }
+PANES.forEach((p,k)=>{
+  const n=document.createElement('div'); n.className='paneNav';
+  if(k>0){ const a=document.createElement('button'); a.type='button'; a.textContent='‹ '+TABS[k-1].textContent; a.addEventListener('click',()=>irPestana(k-1)); n.appendChild(a); }
+  if(k<PANES.length-1){ const b=document.createElement('button'); b.type='button'; b.className='sig'; b.textContent=TABS[k+1].textContent+' ›'; b.addEventListener('click',()=>irPestana(k+1)); n.appendChild(b); }
+  p.appendChild(n);
+});
+TABS.forEach((t,k)=>t.addEventListener('click',()=>irPestana(k)));
+/* OP fija arriba: elegida, se reduce a una línea; un resumen queda pegado sobre las pestañas */
+function actualizarChip(){
+  const m=S.op, t=[m?('OP '+m.op):'',m&&m.grupo,m&&m.color,v('servicio')].filter(Boolean);
+  $('chipOp').textContent=t.join(' · '); $('chipOp').classList.toggle('on',t.length>0);
+}
+function compactarOp(on){
+  $('cardOp').classList.toggle('compacta',!!on);
+  if(on && S.op) $('pFijaTx').textContent=S.op.op+' · '+[S.op.grupo,S.op.color].filter(Boolean).join(' · ');
+  actualizarChip();
+}
+$('btnCambiarOp').addEventListener('click',()=>{ compactarOp(false); $('opInput').focus(); $('opInput').select(); });
+document.querySelector('.wrap').addEventListener('input',()=>{ setTimeout(refrescarMarcas,0); actualizarChip(); });
+document.querySelector('.wrap').addEventListener('click',()=>setTimeout(refrescarMarcas,0));
+
 iniciar();
 </script>
 <!-- ===== lives-franja v6.2 (2026-10-27: pestañas ya no se meten en la barra al bajar y subir) · v6.1 · 2026-10-09 · sin franja de estado arriba y sin la palabra "Supabase" (común a todas las herramientas).
