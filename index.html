@@ -770,12 +770,12 @@ function abrirQuien(){
   const cerrar=()=>ov.remove();
   $('qSel').addEventListener('change',()=>{ $('qOtro').value=''; $('qErr').textContent=''; });
   $('qOtro').addEventListener('input',()=>{ $('qSel').value=''; $('qErr').textContent=''; });
-  $('qNo').addEventListener('click',cerrar);
+  $('qNo').addEventListener('click',()=>{ abrirQuien.luego=''; cerrar(); });
   ov.addEventListener('click',e=>{ if(e.target===ov) cerrar(); });
   $('qOk').addEventListener('click',()=>{
     const val=($('qOtro').value.trim()||$('qSel').value).trim();
     if(!val){ $('qErr').textContent='Elige tu nombre o escribe tu usuario.'; return; }
-    try{ localStorage.setItem(QUIEN_KEY,val); }catch(e){ $('qErr').textContent='Este navegador no deja guardar el nombre.'; return; }
+    try{ localStorage.setItem(QUIEN_KEY,val); if(abrirQuien.luego) sessionStorage.setItem('lives_art_abrir',abrirQuien.luego); }catch(e){ $('qErr').textContent='Este navegador no deja guardar el nombre.'; return; }
     location.reload();
   });
   const q=$('qQuitar'); if(q) q.addEventListener('click',()=>{ try{ localStorage.removeItem(QUIEN_KEY); }catch(e){} location.reload(); });
@@ -788,7 +788,8 @@ async function iniciar(){
     else { b.disabled=true; b.textContent='Solo para quien registra'; b.title=INI.supervision?'Modo supervisión: ves todo, no se guarda nada':'Solo para quien registra auditorías de Artes'; }
   }catch(e){ $('btnRegistrar').textContent='Solo para quien registra'; }
   if(!NOMBRE_PORTAL){ const q=$('btnQuien'); q.style.display=''; q.textContent=USUARIO?'Cambiar de persona':'Identificarme'; q.title=USUARIO?('Registrando como '+USUARIO.toUpperCase()):'Elige quién eres para poder registrar'; q.onclick=abrirQuien;
-    if(!USUARIO){ const b=$('btnRegistrar'); b.disabled=true; b.textContent='Registrar'; b.title='Primero toca Identificarme'; } }
+    if(!USUARIO && !(INI&&INI.supervision)){ const b=$('btnRegistrar'); b.disabled=false; b.textContent='Registrar'; b.title='Te pregunta quién eres una sola vez y abre el formulario'; } }
+  try{ if(USUARIO && sessionStorage.getItem('lives_art_abrir')==='form'){ sessionStorage.removeItem('lives_art_abrir'); setTimeout(()=>abrir('form'),300); } }catch(e){}
   await cargar();
 }
 async function cargar(desde){
@@ -853,7 +854,7 @@ function cerrar(forzar){
   setTimeout(()=>{ $('modal').classList.remove('show'); document.body.classList.remove('modalAbierta'); $('mFrame').src='about:blank'; M_SUCIO=false;
     if(M_REFRESCAR){ M_REFRESCAR=false; cargar($('fDesde').value&&DESDE_CARGADO&&$('fDesde').value<DESDE_CARGADO?$('fDesde').value:undefined); } },80);
 }
-$('btnRegistrar').addEventListener('click',()=>abrir('form'));
+$('btnRegistrar').addEventListener('click',()=>{ if(!USUARIO){ abrirQuien.luego='form'; abrirQuien(); return; } abrir('form'); });
 $('btnDash').addEventListener('click',()=>abrir('dash'));
 $('mCerrar').addEventListener('click',()=>cerrar(false));
 document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('modal').classList.contains('show')) cerrar(false); });
