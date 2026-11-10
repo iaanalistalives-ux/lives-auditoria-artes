@@ -792,8 +792,7 @@ textarea{resize:vertical}
       <button type="button" class="tab on" role="tab" data-t="0">Lote</button>
       <button type="button" class="tab" role="tab" data-t="1">Defectos</button>
       <button type="button" class="tab" role="tab" data-t="2">Medidas</button>
-      <button type="button" class="tab" role="tab" data-t="3">Fotos</button>
-      <button type="button" class="tab" role="tab" data-t="4">Cierre</button>
+      <button type="button" class="tab" role="tab" data-t="3">Cierre</button>
     </nav>
   </div>
 
@@ -867,32 +866,8 @@ textarea{resize:vertical}
     </div>
   </div>
 
-  <!-- 4. FOTOS -->
-  <div class="pane" data-pane="3">
-    <div class="card">
-      <div class="sec"><span class="dot"></span>Fotos de hojas de medidas</div>
-      <div class="hint" style="margin:-6px 0 10px">Opcional.</div>
-      <div class="fotos" id="fotosMed"></div>
-      <div class="fotoBtns">
-        <label class="fotoBtn">📷 Tomar foto<input type="file" accept="image/*" capture="environment" id="inMed" hidden></label>
-        <label class="fotoBtn">🖼️ Elegir de galería<input type="file" accept="image/*" id="inMedGal" multiple hidden></label>
-      </div>
-      <div class="hint" id="medCount">0 fotos · máximo 10</div>
-    </div>
-    <div class="card">
-      <div class="sec"><span class="dot"></span>Fotos de la prenda y del arte</div>
-      <div class="hint" style="margin:-6px 0 10px">Opcional. Las fotos de cada defecto se toman con 📷 en su fila, en la pestaña Defectos.</div>
-      <div class="fotos" id="fotosGen"></div>
-      <div class="fotoBtns">
-        <label class="fotoBtn">📷 Tomar foto<input type="file" accept="image/*" capture="environment" id="inGen" hidden></label>
-        <label class="fotoBtn">🖼️ Elegir de galería<input type="file" accept="image/*" id="inGenGal" multiple hidden></label>
-      </div>
-      <div class="hint" id="genCount">0 fotos · máximo 10</div>
-    </div>
-  </div>
-
   <!-- 5. CIERRE -->
-  <div class="pane" data-pane="4">
+  <div class="pane" data-pane="3">
     <div class="card ov-card" id="ovCard">
       <div class="sec" style="color:#b7791f"><span class="dot" style="background:#b7791f"></span>Pase al rechazo</div>
       <div class="toggle ovr">
@@ -1193,7 +1168,7 @@ $('camGlobal').onchange=$('galGlobal').onchange=e=>{
 };
 function pintarFotos(cual){
   const arr=cual==='med'?S.fotosMed:S.fotosGen, cont=$(cual==='med'?'fotosMed':'fotosGen');
-  cont.innerHTML='';
+  if(!cont) return; cont.innerHTML='';
   arr.forEach((val,i)=>{ const d=document.createElement('div'); d.className='fotoItem';
     d.innerHTML=fotoMini(val)+'<button type="button" class="del" aria-label="quitar">×</button>';
     d.querySelector('.del').onclick=()=>{ arr.splice(i,1); pintarFotos(cual); marcarSucio(); };
@@ -1208,7 +1183,7 @@ function agregarFotos(files,cual){
     shrink(f,b64=>{ if(arr.length<MAX_FOTOS) arr.push(b64); pend--; if(pend<=0){ pintarFotos(cual); marcarSucio(); guardarBorradorAhora(); } },()=>{ pend--; },cual==='med');
   });
 }
-[['inMed','med'],['inMedGal','med'],['inGen','gen'],['inGenGal','gen']].forEach(([id,c])=>{ $(id).onchange=e=>{ agregarFotos(e.target.files,c); e.target.value=''; }; });
+[['inMed','med'],['inMedGal','med'],['inGen','gen'],['inGenGal','gen']].forEach(([id,c])=>{ if($(id)) $(id).onchange=e=>{ agregarFotos(e.target.files,c); e.target.value=''; }; });
 /* Achica la foto en el celular (igual que Auditoría Final). escaner=true: hoja de medidas en gris con contraste. */
 function shrink(file,cb,onerr,escaner){
   const avisarError=msg=>{ if(onerr) onerr(msg); toast(msg,'err'); };
