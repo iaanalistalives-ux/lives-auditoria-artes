@@ -698,7 +698,7 @@ body.modalAbierta{overflow:hidden}
     <label>Servicio<select id="fServ"><option value="">Todos</option></select></label>
     <label>Auditora<select id="fAud"><option value="">Todas</option></select></label>
     <label>Resultado<select id="fRes"><option value="">Todos</option><option value="APROBADO">Aprobado</option><option value="PASE">Aprobado con pase</option><option value="RECHAZADO">Rechazado</option></select></label>
-    <label>Buscar<input type="search" id="fQ" placeholder="OP, grupo, estilo, color…"></label>
+    <label>Buscar<input type="search" id="fQ" placeholder="Buscar estilo…"></label>
     <button class="btn" id="btnLimpiar" type="button">Limpiar</button>
     <span class="spacer"></span>
     <div class="lsAcc"><button class="btn" id="btnImprimir" type="button">Imprimir</button></div>
@@ -812,7 +812,7 @@ function filtrar(){
   const de=$('fDesde').value, ha=$('fHasta').value, se=$('fServ').value, au=$('fAud').value, re=$('fRes').value, q=norm($('fQ').value.trim());
   return FILAS.filter(f=>(!de||f.fecha>=de)&&(!ha||f.fecha<=ha)&&(!se||f.servicio===se)&&(!au||f.auditor===au)&&
     (!re||(re==='PASE'?(f.override&&f.resultado==='APROBADO'):(re==='APROBADO'?(f.resultado==='APROBADO'&&!f.override):f.resultado===re)))&&
-    (!q||norm([f.id,f.op,f.grupo,f.estilo,f.e_cliente,f.color,f.po,f.cliente,f.servicio,f.observacion].join(' ')).indexOf(q)>=0));
+    (!q||norm([f.estilo,f.e_cliente].join(' ')).indexOf(q)>=0));
 }
 function hayFiltro(){ return !!($('fDesde').value||$('fHasta').value||$('fServ').value||$('fAud').value||$('fRes').value||$('fQ').value.trim()); }
 function render(){
